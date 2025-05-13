@@ -9,17 +9,26 @@
                     "name": "WASD",
                     "type": "Value",
                     "id": "b0f6bee9-25a0-41ae-9d42-49001e587683",
-                    "expectedControlType": "Axis",
+                    "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "Jump",
+                    "type": "Button",
+                    "id": "3c39eeb2-275f-4fc5-99ab-a330a1d5d511",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
                 {
-                    "name": "Left-right",
-                    "id": "d6964fa5-5276-42fc-b6b8-a14bd1cb1217",
-                    "path": "1DAxis",
+                    "name": "2D Vector",
+                    "id": "d0e51510-9c52-41b7-b5f3-153abde71dc0",
+                    "path": "2DVector",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -28,41 +37,8 @@
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "negative",
-                    "id": "7dca4138-5106-4e77-a40a-bc51161a3ec8",
-                    "path": "<Keyboard>/d",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "WASD",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "positive",
-                    "id": "edb59c07-1583-4eed-95cb-e128eaf3afc9",
-                    "path": "<Keyboard>/a",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "WASD",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "Up-down",
-                    "id": "d4da7e7e-eec0-4dae-b982-a44ab116a521",
-                    "path": "1DAxis",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "WASD",
-                    "isComposite": true,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "Negative",
-                    "id": "245594dc-7d4f-4386-8f44-d284c059b44b",
+                    "name": "up",
+                    "id": "30c02a22-df0f-4b55-b0ea-209fe4d2eef0",
                     "path": "<Keyboard>/w",
                     "interactions": "",
                     "processors": "",
@@ -72,8 +48,8 @@
                     "isPartOfComposite": true
                 },
                 {
-                    "name": "positive",
-                    "id": "50aefdb0-5233-472f-bab3-c95dbdfec00f",
+                    "name": "down",
+                    "id": "462ff966-fd1e-4313-bbc8-c80bf18d4536",
                     "path": "<Keyboard>/s",
                     "interactions": "",
                     "processors": "",
@@ -81,6 +57,39 @@
                     "action": "WASD",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "left",
+                    "id": "72018d18-d34e-48af-b298-dbc68fe95adf",
+                    "path": "<Keyboard>/a",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "WASD",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "right",
+                    "id": "e30b0bc2-a9e3-4fe9-af6c-7ce3e39466c7",
+                    "path": "<Keyboard>/d",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "WASD",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "3d06a4de-624c-4fba-9d04-ab93b8cad541",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Jump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         }
