@@ -83,3 +83,6 @@ crashlytics-build.properties
 *.sqlite3
 *.db-journal
 *.log
+A Shady Demo/.plastic
+A Shady Demo/Library
+A Shady Demo/Logs

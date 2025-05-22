@@ -1,4 +1,0 @@
-repository "A Shady Demo@nocynocy@cloud"
-  path "/"
-    br "/main"
-    co "/main"
