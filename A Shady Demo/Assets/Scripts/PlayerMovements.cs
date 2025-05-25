@@ -9,6 +9,7 @@ public class PlayerMovements : MonoBehaviour
     [SerializeField] private float height = 5f;
     [SerializeField] private Transform viewDirection;
     private Rigidbody rigidbody;
+    public bool isRewinding=false;
     private PlayerInputs playerInputs;
     private void Awake()
     {
@@ -17,6 +18,7 @@ public class PlayerMovements : MonoBehaviour
         playerInputs=new PlayerInputs();
         playerInputs.Default.Enable();
         playerInputs.Default.Jump.performed += Jump;
+        playerInputs.Default.Rewind.performed += Rewind;
     }
     private void Update()
     {
@@ -30,15 +32,19 @@ public class PlayerMovements : MonoBehaviour
             //normalize horizontal view direction
             NormalizeHorizontalVector(viewDirection.transform.forward) * inputVector.y
             + NormalizeHorizontalVector(viewDirection.transform.right) * inputVector.x;
-        //gotta do something here so the movement is smooth, Idk why
-        Debug.Log("");
-        rigidbody.AddForce(movement * speed, ForceMode.Force);
+        GetComponent<Rigidbody>().AddForce(movement * speed, ForceMode.Force);
     }
     private void Jump(InputAction.CallbackContext context)
     {
-        rigidbody.AddForce(new Vector3(0,height,0)*speed,ForceMode.Impulse);
+        GetComponent<Rigidbody>().AddForce(new Vector3(0,height,0)*speed,ForceMode.Impulse);
         //Debug.Log(inputVector);
+        //Debug.Log(context);
 
+    }
+    private void Rewind(InputAction.CallbackContext context)
+    {
+        isRewinding = (playerInputs.Default.Rewind.ReadValue<float>()>0);
+        //Debug.Log(playerInputs.Default.Rewind.ReadValue<float>());
     }
     private Vector3 NormalizeHorizontalVector(Vector3 input)
     {
