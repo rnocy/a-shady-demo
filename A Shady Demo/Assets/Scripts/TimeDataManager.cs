@@ -5,10 +5,15 @@ using UnityEngine;
 public class TimeDataManager : MonoBehaviour
 {
     [SerializeField] private bool Kinematic;
-    private List<KinematicData> kinematicData=new List<KinematicData>();
-    public int timeCount=0;
-    public int kinematicTimeCount;
-    private int frameLimit = 36000;
+    [SerializeField] private int timeCount=0;  //time index
+    [SerializeField] private int kinematicTimeCount;
+    private const int frameLimit = 36000; 
+    private List<KinematicData> kinematicData = new List<KinematicData>();
+    private Rigidbody rigidbody;
+    private void Awake()
+    {
+        rigidbody = GetComponent<Rigidbody>();
+    }
     public void TimeManagement(bool isRewinding,int rewindSpeed)
     {
         if (isRewinding) RewindTime(rewindSpeed);
@@ -16,32 +21,32 @@ public class TimeDataManager : MonoBehaviour
     }
     private void RecordTime()
     {
-        if (Kinematic)
-        {
-            if (kinematicData.Count > frameLimit) kinematicData.RemoveAt(0);
-
-            kinematicData.Add(new KinematicData(transform.position, GetComponent<Rigidbody>().velocity,transform.rotation,GetComponent<Rigidbody>().angularVelocity));
-        }
+        if (Kinematic) KinematicRecord();
         timeCount++;
-        kinematicTimeCount=kinematicData.Count;
     }
     private void RewindTime(int rewindSpeed)
     {
         if (Kinematic) KinematicRewind(rewindSpeed);
-        timeCount=timeCount- rewindSpeed;
-        kinematicTimeCount = kinematicData.Count;
+        timeCount =timeCount- rewindSpeed;
 
+    }
+    private void KinematicRecord()
+    {
+        if (kinematicData.Count > frameLimit) kinematicData.RemoveAt(0);
+        kinematicData.Add(new KinematicData(transform.position, rigidbody.velocity, transform.rotation, rigidbody.angularVelocity));
+        kinematicTimeCount = kinematicData.Count;
     }
     private void KinematicRewind(int rewindSpeed)
     {
         transform.position=kinematicData[kinematicTimeCount-rewindSpeed].Position;
-        GetComponent<Rigidbody>().velocity = kinematicData[kinematicTimeCount - rewindSpeed].Velocity;
+        rigidbody.velocity = kinematicData[kinematicTimeCount - rewindSpeed].Velocity;
         transform.rotation = kinematicData[kinematicTimeCount - rewindSpeed].Rotation;
-        GetComponent<Rigidbody>().angularVelocity = kinematicData[kinematicTimeCount - rewindSpeed].AngularVelocity;
+        rigidbody.angularVelocity = kinematicData[kinematicTimeCount - rewindSpeed].AngularVelocity;
         for (int i = 0; i < rewindSpeed; i++)
         {
             kinematicData.RemoveAt(kinematicData.Count - 1);
         }
+        kinematicTimeCount = kinematicData.Count;
     }
 
     private class KinematicData

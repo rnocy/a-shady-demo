@@ -6,10 +6,13 @@ using UnityEngine;
 public class PlayerMovements : MonoBehaviour
 {
     [SerializeField] private float speed=5f;
+    [SerializeField] private float acceleration = 10f;
     [SerializeField] private float height = 5f;
+    [SerializeField] private float currentSpeed = 0f;
     [SerializeField] private Transform viewDirection;
+    public bool isRewinding = false;
+    private float cosin = 0;
     private Rigidbody rigidbody;
-    public bool isRewinding=false;
     private PlayerInputs playerInputs;
     private void Awake()
     {
@@ -29,14 +32,25 @@ public class PlayerMovements : MonoBehaviour
     {
         Vector2 inputVector = playerInputs.Default.WASD.ReadValue<Vector2>();
         Vector3 movement =
-            //normalize horizontal view direction
-            NormalizeHorizontalVector(viewDirection.transform.forward) * inputVector.y
-            + NormalizeHorizontalVector(viewDirection.transform.right) * inputVector.x;
-        GetComponent<Rigidbody>().AddForce(movement * speed, ForceMode.Force);
+            //normalize sum of normalized horizontal view directions
+            (NormalizeHorizontalVector(viewDirection.transform.forward) * inputVector.y
+            + NormalizeHorizontalVector(viewDirection.transform.right) * inputVector.x).normalized;
+        Vector3 horizontalMovement=HorizontalVector(rigidbody.velocity);
+        Vector3 normalizedHorizontalMovement=Vector3.Normalize(horizontalMovement);
+        cosin=Vector3.Dot(movement, normalizedHorizontalMovement);
+        currentSpeed= horizontalMovement.magnitude;
+        if (currentSpeed <= speed)
+        {
+            rigidbody.AddForce(movement * acceleration*(1+Mathf.Clamp01(-cosin)), ForceMode.Force);
+        }
+        if ((currentSpeed > 0.1) && (movement.magnitude < 0.9)) 
+        {
+            rigidbody.AddForce(normalizedHorizontalMovement * (-1) * acceleration, ForceMode.Force);
+        }
     }
     private void Jump(InputAction.CallbackContext context)
     {
-        GetComponent<Rigidbody>().AddForce(new Vector3(0,height,0)*speed,ForceMode.Impulse);
+        rigidbody.AddForce(new Vector3(0,height,0)*speed,ForceMode.Impulse);
         //Debug.Log(inputVector);
         //Debug.Log(context);
 
@@ -48,7 +62,11 @@ public class PlayerMovements : MonoBehaviour
     }
     private Vector3 NormalizeHorizontalVector(Vector3 input)
     {
-        return Vector3.Normalize(new Vector3(input.x, 0, input.z));
+        return Vector3.Normalize(HorizontalVector(input));
+    }
+    private Vector3 HorizontalVector(Vector3 input)
+    {
+        return new Vector3(input.x,0,input.z);
     }
 
 }

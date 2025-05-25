@@ -4,9 +4,11 @@ using UnityEngine;
 
 public class TimeController : MonoBehaviour
 {
-    [SerializeField] List<TimeDataManager> ControlledObject=new List<TimeDataManager>();
-    [SerializeField] private int rewindSpeed = 2;
-    // Start is called before the first frame update
+    [SerializeField] private List<TimeDataManager> ControlledObject=new List<TimeDataManager>();
+    [SerializeField] private int baseRewindSpeed = 1;
+    [SerializeField] private int rewindSpeed = 1;
+    [SerializeField] private float rewindSpeedRamp = 1;
+    [SerializeField] private float rewindSpeedProgress = 0f;
     [SerializeField] private bool isRewinding=false;
     [SerializeField] private int timeCount = 0;
     private PlayerMovements playerMovements;
@@ -15,14 +17,13 @@ public class TimeController : MonoBehaviour
         ControlledObject = FindTimeManager();
         playerMovements = GetComponent<PlayerMovements>();
     }
-
-    // Update is called once per frame
     private void FixedUpdate()
     {
         TimeUpdate();
     }
     private void TimeUpdate()
     {
+        RampUp();
         if (!isRewinding) timeCount++;
         else timeCount=timeCount-rewindSpeed;
         foreach (TimeDataManager timeData in ControlledObject)
@@ -31,6 +32,12 @@ public class TimeController : MonoBehaviour
         }
         isRewinding = playerMovements.isRewinding;
         if (timeCount <= rewindSpeed-1) isRewinding = false;
+    }
+    private void RampUp()
+    {
+        rewindSpeed = (int)Mathf.Floor(baseRewindSpeed + rewindSpeedProgress);
+        if (isRewinding)    rewindSpeedProgress += Time.fixedDeltaTime * rewindSpeedRamp;        
+        else rewindSpeedProgress = 0f;
     }
     private static List<TimeDataManager> FindTimeManager()
     {
