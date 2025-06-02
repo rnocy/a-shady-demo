@@ -53,6 +53,15 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Swap"",
+                    ""type"": ""Button"",
+                    ""id"": ""d6c6e773-9171-456e-a99e-fc359dd401c5"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -132,6 +141,17 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""action"": ""Rewind"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c4a4f992-fbba-40a1-97c0-ad1ea7c0eba1"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Swap"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -143,6 +163,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         m_Default_WASD = m_Default.FindAction("WASD", throwIfNotFound: true);
         m_Default_Jump = m_Default.FindAction("Jump", throwIfNotFound: true);
         m_Default_Rewind = m_Default.FindAction("Rewind", throwIfNotFound: true);
+        m_Default_Swap = m_Default.FindAction("Swap", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -207,6 +228,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
     private readonly InputAction m_Default_WASD;
     private readonly InputAction m_Default_Jump;
     private readonly InputAction m_Default_Rewind;
+    private readonly InputAction m_Default_Swap;
     public struct DefaultActions
     {
         private @PlayerInputs m_Wrapper;
@@ -214,6 +236,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         public InputAction @WASD => m_Wrapper.m_Default_WASD;
         public InputAction @Jump => m_Wrapper.m_Default_Jump;
         public InputAction @Rewind => m_Wrapper.m_Default_Rewind;
+        public InputAction @Swap => m_Wrapper.m_Default_Swap;
         public InputActionMap Get() { return m_Wrapper.m_Default; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -232,6 +255,9 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
             @Rewind.started += instance.OnRewind;
             @Rewind.performed += instance.OnRewind;
             @Rewind.canceled += instance.OnRewind;
+            @Swap.started += instance.OnSwap;
+            @Swap.performed += instance.OnSwap;
+            @Swap.canceled += instance.OnSwap;
         }
 
         private void UnregisterCallbacks(IDefaultActions instance)
@@ -245,6 +271,9 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
             @Rewind.started -= instance.OnRewind;
             @Rewind.performed -= instance.OnRewind;
             @Rewind.canceled -= instance.OnRewind;
+            @Swap.started -= instance.OnSwap;
+            @Swap.performed -= instance.OnSwap;
+            @Swap.canceled -= instance.OnSwap;
         }
 
         public void RemoveCallbacks(IDefaultActions instance)
@@ -267,5 +296,6 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         void OnWASD(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
         void OnRewind(InputAction.CallbackContext context);
+        void OnSwap(InputAction.CallbackContext context);
     }
 }

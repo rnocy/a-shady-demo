@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.InputSystem;
 using UnityEngine;
 
 public class TimeController : MonoBehaviour
@@ -11,11 +12,22 @@ public class TimeController : MonoBehaviour
     [SerializeField] private float rewindSpeedProgress = 0f;
     [SerializeField] private bool isRewinding=false;
     [SerializeField] private int timeCount = 0;
+    public bool isShadow=false;
+    private PlayerInputs playerInputs;
     private PlayerMovements playerMovements;
+    private ShadowMovements shadowMovements;
+    private CameraController cameraController;
     private void Awake()
     {
         ControlledObject = FindTimeManager();
-        playerMovements = GetComponent<PlayerMovements>();
+        playerInputs = new PlayerInputs();
+        playerInputs.Default.Enable();
+        playerMovements = GameObject.Find("PLAYER").GetComponent<PlayerMovements>();
+        shadowMovements = GameObject.Find("SHADOW").GetComponent<ShadowMovements>();
+        cameraController = GameObject.Find("CAMERACONTROL").GetComponent<CameraController>();
+        playerInputs.Default.Rewind.performed += Rewind;
+        playerInputs.Default.Swap.performed += Swap;
+        SetActiveCharacter();
     }
     private void FixedUpdate()
     {
@@ -30,7 +42,6 @@ public class TimeController : MonoBehaviour
         {
             timeData.TimeManagement(isRewinding,rewindSpeed);
         }
-        isRewinding = playerMovements.isRewinding;
         if (timeCount <= rewindSpeed-1) isRewinding = false;
     }
     private void RampUp()
@@ -38,6 +49,22 @@ public class TimeController : MonoBehaviour
         rewindSpeed = (int)Mathf.Floor(baseRewindSpeed + rewindSpeedProgress);
         if (isRewinding)    rewindSpeedProgress += Time.fixedDeltaTime * rewindSpeedRamp;        
         else rewindSpeedProgress = 0f;
+    }
+    private void Rewind(InputAction.CallbackContext context)
+    {
+        isRewinding = (playerInputs.Default.Rewind.ReadValue<float>() > 0);
+        //Debug.Log(playerInputs.Default.Rewind.ReadValue<float>());
+    }
+    private void Swap(InputAction.CallbackContext context)
+    {
+        isShadow = !isShadow;
+        SetActiveCharacter();
+        cameraController.SwapCamera(isShadow);
+    }
+    private void SetActiveCharacter()
+    {
+        playerMovements.isActive = !isShadow;
+        shadowMovements.isActive = isShadow;
     }
     private static List<TimeDataManager> FindTimeManager()
     {
@@ -59,4 +86,5 @@ public class TimeController : MonoBehaviour
 
         return goList;
     }
+
 }
