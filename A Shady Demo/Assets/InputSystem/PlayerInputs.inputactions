@@ -112,7 +112,7 @@
                 {
                     "name": "",
                     "id": "b6f294bb-3b95-4c65-aa3d-4eae5bc2581a",
-                    "path": "<Keyboard>/e",
+                    "path": "<Keyboard>/r",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -123,7 +123,7 @@
                 {
                     "name": "",
                     "id": "c4a4f992-fbba-40a1-97c0-ad1ea7c0eba1",
-                    "path": "<Keyboard>/q",
+                    "path": "<Keyboard>/tab",
                     "interactions": "",
                     "processors": "",
                     "groups": "",

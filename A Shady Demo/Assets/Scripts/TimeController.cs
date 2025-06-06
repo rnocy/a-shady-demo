@@ -59,12 +59,12 @@ public class TimeController : MonoBehaviour
     {
         isShadow = !isShadow;
         SetActiveCharacter();
-        cameraController.SwapCamera(isShadow);
     }
     private void SetActiveCharacter()
     {
         playerMovements.isActive = !isShadow;
         shadowMovements.isActive = isShadow;
+        cameraController.SwapCamera(isShadow);
     }
     private static List<TimeDataManager> FindTimeManager()
     {
