@@ -11,6 +11,7 @@ public class ShadowMovements : MonoBehaviour
     [SerializeField] private float currentSpeed = 0f;
     [SerializeField] private Transform viewDirection;
     [SerializeField] public bool isActive=true;
+    private Transform shadowTransform;
     private float cosin = 0;
     private Rigidbody rigidbody;
     private PlayerInputs playerInputs;
@@ -21,6 +22,8 @@ public class ShadowMovements : MonoBehaviour
         playerInputs = new PlayerInputs();
         playerInputs.Default.Enable();
         playerInputs.Default.Jump.performed += Jump;
+        viewDirection = GetComponent<Transform>();
+        shadowTransform = GetComponent<Transform>();
     }
     private void Update()
     {
@@ -63,5 +66,8 @@ public class ShadowMovements : MonoBehaviour
     {
         return new Vector3(input.x, 0, input.z);
     }
-
+    void OnTriggerEnter(Collider other)
+    {
+        viewDirection = other.transform;
+    }
 }
