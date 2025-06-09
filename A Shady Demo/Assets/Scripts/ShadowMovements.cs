@@ -36,9 +36,9 @@ public class ShadowMovements : MonoBehaviour
         Vector3 movement =
             //normalize sum of normalized horizontal view directions
             //shadow movements vector are swapped
-            (NormalizeHorizontalVector(viewDirection.transform.right) * inputVector.y*0
-            + NormalizeHorizontalVector(viewDirection.transform.forward) * inputVector.x).normalized;
-        Vector3 horizontalMovement = HorizontalVector(rigidbody.velocity);
+            (NormalizeHorizontalVector(viewDirection.transform.right,viewDirection.up) * inputVector.y*0
+            + NormalizeHorizontalVector(viewDirection.transform.forward,viewDirection.up) * inputVector.x).normalized;
+        Vector3 horizontalMovement = HorizontalVector(rigidbody.velocity, viewDirection.up);
         Vector3 normalizedHorizontalMovement = Vector3.Normalize(horizontalMovement);
         cosin = Vector3.Dot(movement, normalizedHorizontalMovement);
         currentSpeed = horizontalMovement.magnitude;
@@ -53,21 +53,19 @@ public class ShadowMovements : MonoBehaviour
     }
     private void Jump(InputAction.CallbackContext context)
     {
-        if (isActive) rigidbody.AddForce(new Vector3(0, height, 0) * speed, ForceMode.Impulse);
+        if (isActive) rigidbody.AddForce(viewDirection.up * height, ForceMode.Impulse);
         //Debug.Log(inputVector);
         //Debug.Log(context);
 
     }
-    private Vector3 NormalizeHorizontalVector(Vector3 input)
+    private Vector3 NormalizeHorizontalVector(Vector3 input, Vector3 normal)
     {
-        return Vector3.Normalize(HorizontalVector(input));
+        return Vector3.Normalize(HorizontalVector(input,normal));
     }
-    private Vector3 HorizontalVector(Vector3 input)
+    private Vector3 HorizontalVector(Vector3 input, Vector3 normal)
     {
-        return new Vector3(input.x, 0, input.z);
+
+        return Vector3.ProjectOnPlane(input,normal);
     }
-    void OnTriggerEnter(Collider other)
-    {
-        viewDirection = other.transform;
-    }
+
 }

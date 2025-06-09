@@ -6,17 +6,17 @@ Shader "Temmie/StandardShadowCaster"
     }
     SubShader
     {
-        Tags { "RenderType"="Transparent" "Queue"="Geometry+1" }
+        Tags { "RenderType"="Opaque" "Queue"="Geometry" "IgnoreProjector" = "True"}
         Blend SrcAlpha OneMinusSrcAlpha
         LOD 100
-        Cull Front
+        Cull Off
         ZWrite Off
-        ZTest Always
+        ZTest LEqual
         Stencil
         {
-            Comp Always
-            Pass DecrSat
-            Zfail DecrSat
+            PassFront DecrWrap
+            PassBack IncrWrap
+
         }          
         Pass
         {

@@ -6,7 +6,7 @@ public class ShadowsPhysics : MonoBehaviour
 {
     // Start is called before the first frame update
     private Rigidbody rigidBody;
-    private Transform controlRoot;
+    public Transform controlRoot;
     [SerializeField] private Vector3 gravityVector;
     [SerializeField] private float gravityMultiplier=1;
     void Awake()
@@ -28,25 +28,32 @@ public class ShadowsPhysics : MonoBehaviour
     }
     void OnTriggerStay(Collider other)
     {
-        
+
         if (other.TryGetComponent<GravityModifier>(out GravityModifier gravityModifier))
         {
-            Vector3 tempGravity=new Vector3(0,0,0);
-            if (gravityModifier.isRadial) tempGravity=Vector3.Normalize(transform.position-other.transform.position);
-            else tempGravity=gravityModifier.transform.up*-1;
-            if (gravityModifier.isReversed) tempGravity*=-1;
-            gravityVector=tempGravity;
+            Vector3 tempGravity = new Vector3(0, 0, 0);
+            if (gravityModifier.isRadial) tempGravity = Vector3.Normalize(transform.position - other.transform.position);
+            else tempGravity = gravityModifier.transform.up * -1;
+            if (gravityModifier.isReversed) tempGravity *= -1;
+            gravityVector = tempGravity;
+            Vector3 newForwardVector = -Vector3.Cross(other.transform.right, gravityVector).normalized;
+            controlRoot.rotation = Quaternion.LookRotation(newForwardVector, -gravityVector);
             //Debug.Log(tempGravity);
-        }        
+            MoveShadow(other.transform);
+
+        }
     }
     void OnTriggerEnter(Collider other)
     {
-        Vector3 newForwardVector=Vector3.ProjectOnPlane(controlRoot.forward,other.transform.right).normalized;
-        Vector3 newUpVector = Vector3.ProjectOnPlane(controlRoot.up, other.transform.right).normalized;
-        Vector3 newRightVector = Vector3.Cross(newForwardVector, newUpVector);
-        controlRoot.rotation = Quaternion.LookRotation(newForwardVector, newUpVector);
+        if (!other.TryGetComponent<GravityModifier>(out GravityModifier gravityModifier))
+        {
+            Vector3 newForwardVector=Vector3.ProjectOnPlane(controlRoot.forward,other.transform.right).normalized;
+            Vector3 newUpVector = Vector3.ProjectOnPlane(controlRoot.up, other.transform.right).normalized;
+            Vector3 newRightVector = Vector3.Cross(newForwardVector, newUpVector);
+            controlRoot.rotation = Quaternion.LookRotation(newForwardVector, newUpVector);
 
-        MoveShadow(other.transform);
+            MoveShadow(other.transform);
+        }
     }
     private void MoveShadow(Transform other)
     {

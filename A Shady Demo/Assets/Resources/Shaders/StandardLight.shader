@@ -9,16 +9,19 @@ Shader "Temmie/StandardLight"
         Tags { "RenderType"="Transparent" "Queue"="Geometry" }
         Blend SrcAlpha OneMinusSrcAlpha
         LOD 100
-        Cull Front
+        Cull Off
         ZWrite Off
+        ZTest Greater
         Stencil
         {
-            Comp Always
-            Pass IncrSat
-            Zfail IncrSat
-        }          
+
+            PassBack IncrWrap
+            PassFront DecrWrap
+        }        
+          
         Pass
         {
+            
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag
@@ -59,4 +62,5 @@ Shader "Temmie/StandardLight"
             ENDCG
         }
     }
+    
 }

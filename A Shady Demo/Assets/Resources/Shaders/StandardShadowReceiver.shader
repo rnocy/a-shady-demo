@@ -6,7 +6,7 @@ Shader "Temmie/StandardShadowReciever"
     }
     SubShader
     {
-        Tags { "RenderType"="Opaque" "Queue"="Geometry+2"}
+        Tags { "RenderType"="Opaque" "Queue"="Geometry"}
         LOD 100
 
         Pass
