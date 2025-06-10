@@ -6,12 +6,12 @@ using UnityEngine;
 public class ShadowMovements : MonoBehaviour
 {
     [SerializeField] private float speed = 5f;
-    [SerializeField] private float acceleration = 10f;
+    [SerializeField] private float acceleration = 30f;
     [SerializeField] private float height = 1f;
     [SerializeField] private float currentSpeed = 0f;
     [SerializeField] private Transform viewDirection;
     [SerializeField] public bool isActive=true;
-    private Transform shadowTransform;
+    private ShadowsPhysics shadowsPhysics;
     private float cosin = 0;
     private Rigidbody rigidbody;
     private PlayerInputs playerInputs;
@@ -22,12 +22,13 @@ public class ShadowMovements : MonoBehaviour
         playerInputs = new PlayerInputs();
         playerInputs.Default.Enable();
         playerInputs.Default.Jump.performed += Jump;
-        viewDirection = GetComponent<Transform>();
-        shadowTransform = GetComponent<Transform>();
+        //viewDirection = GetComponent<Transform>();
+        shadowsPhysics = GetComponent<ShadowsPhysics>();
     }
-    private void Update()
+    private void FixedUpdate()
     {
         if (isActive) Movement();
+        viewDirection.rotation = shadowsPhysics.targetRotation;
 
     }
     private void Movement()
@@ -46,7 +47,7 @@ public class ShadowMovements : MonoBehaviour
         {
             rigidbody.AddForce(movement * acceleration * (1 + Mathf.Clamp01(-cosin)), ForceMode.Force);
         }
-        if ((currentSpeed > 0.1) && (movement.magnitude < 0.9))
+        if ((currentSpeed > 0.01) && (movement.magnitude < 0.9))
         {
             rigidbody.AddForce(normalizedHorizontalMovement * (-1) * acceleration, ForceMode.Force);
         }

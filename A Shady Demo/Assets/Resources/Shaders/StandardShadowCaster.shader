@@ -1,4 +1,4 @@
-Shader "Temmie/StandardShadowCaster"
+Shader "Unlit/StandardShadowCaster"
 {
     Properties
     {
@@ -6,20 +6,22 @@ Shader "Temmie/StandardShadowCaster"
     }
     SubShader
     {
-        Tags { "RenderType"="Opaque" "Queue"="Geometry" "IgnoreProjector" = "True"}
+        Tags { "RenderType"="Transparent" "Queue"="Geometry" }
         Blend SrcAlpha OneMinusSrcAlpha
         LOD 100
         Cull Off
         ZWrite Off
-        ZTest LEqual
+        ZTest Greater
         Stencil
         {
-            PassFront DecrWrap
-            PassBack IncrWrap
 
-        }          
+            PassBack DecrWrap
+            PassFront IncrWrap
+        }        
+          
         Pass
         {
+            
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag
@@ -60,4 +62,5 @@ Shader "Temmie/StandardShadowCaster"
             ENDCG
         }
     }
+    
 }

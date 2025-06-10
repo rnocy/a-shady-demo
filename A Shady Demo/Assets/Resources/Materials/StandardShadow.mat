@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: StandardShadow
-  m_Shader: {fileID: 4800000, guid: 1868eae7f96a246489eda1d41daa5604, type: 3}
+  m_Shader: {fileID: 4800000, guid: 305eba5200ebb3e4aa2ad502433fa549, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []

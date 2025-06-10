@@ -51,7 +51,7 @@ Shader "Temmie/StandardShadowReciever"
             {
                 // sample the texture
                 fixed4 col = tex2D(_MainTex, i.uv);
-                return fixed4(0.1,0.1,0.1,1);
+                return fixed4(0.05,0.05,0.05,1);
             }
             ENDCG
         }
@@ -97,7 +97,7 @@ Shader "Temmie/StandardShadowReciever"
                 // sample the texture
                 fixed4 col = tex2D(_MainTex, i.uv);
                 // apply fog
-                return fixed4(0.5,0.5,0.5,1);
+                return fixed4(0.7,0.7,0.7,1);
             }
             ENDCG
         }
@@ -144,7 +144,7 @@ Shader "Temmie/StandardShadowReciever"
                 // sample the texture
                 fixed4 col = tex2D(_MainTex, i.uv);
                 // apply fog
-                return fixed4(1,1,1,1);
+                return fixed4(0.7,0.7,0.7,1);
             }
             ENDCG
         }
